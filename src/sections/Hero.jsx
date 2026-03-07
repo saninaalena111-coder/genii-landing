@@ -48,7 +48,7 @@ function Hero() {
             {trustPoints.map((point) => (
               <div
                 key={point}
-                className="rounded-2xl border border-white/10 bg-genii-bg-deep/60 px-4 py-3 text-sm text-genii-light shadow-edge"
+                className="surface-muted px-4 py-3 text-sm text-genii-light"
               >
                 {point}
               </div>
@@ -61,7 +61,7 @@ function Hero() {
               '✓ поддержка кураторов',
               '✓ закрытое комьюнити',
             ].map((item) => (
-              <span key={item} className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              <span key={item} className="rounded-full border border-white/12 bg-white/[0.03] px-3 py-1">
                 {item}
               </span>
             ))}
@@ -89,7 +89,9 @@ function Hero() {
                   <span>Preview</span>
                 </div>
                 <div className="flex h-40 items-center justify-center rounded-2xl border border-white/10 bg-genii-bg-deep/70 text-genii-light">
-                  <Video className="h-10 w-10 text-genii-accent" />
+                  <span className="icon-wrap icon-glow h-12 w-12 text-genii-accent">
+                    <Video className="h-6 w-6" />
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-xs text-genii-muted">
                   <span>Генерация в реальном времени</span>
@@ -101,10 +103,12 @@ function Hero() {
             <motion.div
               animate={{ y: [0, -6, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -left-4 -top-6 hidden rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-genii-light shadow-card backdrop-blur-xl sm:block"
+              className="icon-card absolute -left-4 -top-6 hidden rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-genii-light shadow-none backdrop-blur-xl sm:block"
             >
               <div className="flex items-center gap-2">
-                <Wand2 className="h-4 w-4 text-genii-accent" />
+                <span className="icon-wrap icon-glow h-6 w-6 text-genii-accent">
+                  <Wand2 className="h-3.5 w-3.5" />
+                </span>
                 AI video generation
               </div>
             </motion.div>
@@ -112,10 +116,12 @@ function Hero() {
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -right-6 top-8 hidden rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-genii-light shadow-card backdrop-blur-xl sm:block"
+              className="icon-card absolute -right-6 top-8 hidden rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-genii-light shadow-none backdrop-blur-xl sm:block"
             >
               <div className="flex items-center gap-2">
-                <Layers className="h-4 w-4 text-genii-accent" />
+                <span className="icon-wrap icon-glow h-6 w-6 text-genii-accent">
+                  <Layers className="h-3.5 w-3.5" />
+                </span>
                 Midjourney visuals
               </div>
             </motion.div>
@@ -123,10 +129,12 @@ function Hero() {
             <motion.div
               animate={{ y: [0, -5, 0] }}
               transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -bottom-6 left-6 hidden rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-genii-light shadow-card backdrop-blur-xl sm:block"
+              className="icon-card absolute -bottom-6 left-6 hidden rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-genii-light shadow-none backdrop-blur-xl sm:block"
             >
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-genii-accent" />
+                <span className="icon-wrap icon-glow h-6 w-6 text-genii-accent">
+                  <Sparkles className="h-3.5 w-3.5" />
+                </span>
                 Character creation
               </div>
             </motion.div>
@@ -134,10 +142,12 @@ function Hero() {
             <motion.div
               animate={{ y: [0, 6, 0] }}
               transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -bottom-10 right-4 hidden rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-genii-light shadow-card backdrop-blur-xl sm:block"
+              className="icon-card absolute -bottom-10 right-4 hidden rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-genii-light shadow-none backdrop-blur-xl sm:block"
             >
               <div className="flex items-center gap-2">
-                <Share2 className="h-4 w-4 text-genii-accent" />
+                <span className="icon-wrap icon-glow h-6 w-6 text-genii-accent">
+                  <Share2 className="h-3.5 w-3.5" />
+                </span>
                 Social media content
               </div>
             </motion.div>
@@ -154,10 +164,12 @@ function Hero() {
               return (
                 <div
                   key={item.text}
-                  className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-genii-light shadow-edge backdrop-blur-xl"
+                  className="icon-card rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-genii-light shadow-none backdrop-blur-xl"
                 >
                   <div className="flex items-center gap-2">
-                    <Icon className="h-4 w-4 text-genii-accent" />
+                    <span className="icon-wrap icon-glow h-6 w-6 text-genii-accent">
+                      <Icon className="h-3.5 w-3.5" />
+                    </span>
                     {item.text}
                   </div>
                 </div>

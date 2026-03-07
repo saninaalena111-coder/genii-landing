@@ -8,8 +8,8 @@ function AccordionItem({ item, index, isOpen, onToggle }) {
 
   return (
     <div
-      className={`rounded-2xl border border-white/10 bg-white/5 p-5 shadow-edge transition-colors duration-300 ${
-        isOpen ? 'bg-white/10' : 'hover:border-white/20'
+      className={`rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-colors duration-300 ${
+        isOpen ? 'bg-white/[0.06]' : 'hover:border-white/20'
       }`}
     >
       <button

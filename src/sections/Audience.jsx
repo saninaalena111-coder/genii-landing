@@ -25,9 +25,9 @@ function Audience() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            className={`card-surface flex items-center gap-4 p-5 ${surfaceClass}`}
+            className={`card-surface icon-card flex items-center gap-4 p-5 ${surfaceClass}`}
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-genii-accent/30 bg-genii-accent/15 text-genii-accent shadow-edge">
+            <div className="icon-wrap icon-glow h-10 w-10 text-genii-accent">
               <Users className="h-5 w-5" />
             </div>
             <p className="text-sm text-genii-light sm:text-base">{item}</p>

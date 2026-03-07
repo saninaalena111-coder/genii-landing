@@ -1,6 +1,7 @@
-function GlassCard({ children, className = '' }) {
+function GlassCard({ children, className = '', variant = 'glass' }) {
+  const variantClass = variant === 'muted' ? 'surface-muted' : 'glass-panel';
   return (
-    <div className={`glass-panel relative p-6 shadow-card sm:p-8 ${className}`}>
+    <div className={`${variantClass} relative p-6 sm:p-8 ${className}`}>
       {children}
     </div>
   );

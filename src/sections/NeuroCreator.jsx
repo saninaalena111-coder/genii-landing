@@ -17,12 +17,14 @@ function NeuroCreator() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
       >
-        <GlassCard className="relative w-full overflow-hidden">
+  <GlassCard className="icon-card relative w-full overflow-hidden">
           <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-genii-accent/30 blur-[80px]" />
           <div className="absolute bottom-0 left-0 h-40 w-40 rounded-full bg-white/10 blur-[90px]" />
           <div className="relative flex flex-col gap-6">
             <div className="flex items-center gap-3 text-genii-light">
-              <Orbit className="h-6 w-6 text-genii-accent" />
+              <span className="icon-wrap icon-glow h-6 w-6 text-genii-accent">
+                <Orbit className="h-4 w-4" />
+              </span>
               <span className="text-sm uppercase tracking-[0.3em]">Профессия 2026</span>
             </div>
             <h3 className="text-2xl font-semibold text-white sm:text-3xl">

@@ -2,6 +2,8 @@ import Hero from './sections/Hero';
 import WorldShift from './sections/WorldShift';
 import Authors from './sections/Authors';
 import Cases from './sections/Cases';
+import ViralCarousel from './sections/ViralCarousel';
+import VideoGallery from './sections/VideoGallery';
 import Skills from './sections/Skills';
 import Curriculum from './sections/Curriculum';
 import MidCta from './sections/MidCta';
@@ -28,6 +30,10 @@ function App() {
         <SectionDivider />
         <Cases />
         <SectionDivider />
+  <ViralCarousel />
+  <SectionDivider />
+  <VideoGallery />
+  <SectionDivider />
         <Skills />
         <SectionDivider />
         <Curriculum />

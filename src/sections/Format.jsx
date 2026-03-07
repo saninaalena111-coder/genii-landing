@@ -20,7 +20,9 @@ function Format() {
       >
         {formatItems.map((item) => (
           <li key={item} className="flex items-start gap-4">
-            <Check className="mt-1 h-6 w-6 text-genii-accent" />
+            <span className="icon-wrap icon-glow mt-1 h-6 w-6 text-genii-accent">
+              <Check className="h-4 w-4" />
+            </span>
             <span className="leading-relaxed">{item}</span>
           </li>
         ))}

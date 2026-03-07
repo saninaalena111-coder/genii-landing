@@ -18,18 +18,18 @@ function Curriculum() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            className={`flex flex-col gap-6 rounded-3xl border backdrop-blur-xl shadow-card ${
+            className={`icon-card card-surface flex flex-col gap-6 p-6 sm:p-8 ${
               blockIndex === 1
                 ? 'border-genii-accent/30 bg-genii-accent/10'
                 : blockIndex === 2
                 ? 'border-white/10 bg-white/8'
-                : 'border-white/10 bg-white/5'
-            } p-6 sm:p-8`}
+                : 'border-white/10 bg-white/[0.03]'
+            }`}
           >
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-genii-accent/20">
-                  <Layers className="h-5 w-5 text-genii-accent" />
+                <div className="icon-wrap icon-glow h-11 w-11 text-genii-accent">
+                  <Layers className="h-5 w-5" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white">{block.title}</h3>

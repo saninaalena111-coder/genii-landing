@@ -75,10 +75,10 @@ function Authors() {
           <span className="pointer-events-none absolute inset-x-0 -bottom-6 h-px bg-gradient-to-r from-transparent via-genii-accent/50 to-transparent" />
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-          <div className="relative order-1 lg:order-none">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
+          <div className="relative order-1 h-full lg:order-none">
             <div className="pointer-events-none absolute -inset-8 rounded-[40px] bg-[radial-gradient(circle_at_30%_20%,rgba(123,23,35,0.45),transparent_60%)] blur-2xl" />
-            <div className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5">
+            <div className="group relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-white/5">
               <img
                 src={authorsPhoto}
                 alt="Марина Нури и Ольга Бордюкова"
@@ -87,7 +87,7 @@ function Authors() {
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-genii-bg-deep/80" />
               <div className="absolute bottom-0 left-0 right-0">
-                <div className="mx-5 mb-5 rounded-2xl border border-white/20 bg-white/10 px-4 py-3 backdrop-blur">
+                <div className="mx-5 mb-5 rounded-2xl border border-white/15 bg-gradient-to-r from-white/5 via-transparent to-white/5 px-4 py-3">
                   <p className="text-sm font-semibold text-white sm:text-base">
                     Марина Нури · Ольга Бордюкова
                   </p>
@@ -99,8 +99,8 @@ function Authors() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-8">
-            <div className="grid gap-6 sm:grid-cols-2">
+          <div className="flex h-full flex-col justify-between gap-8">
+            <div className="grid flex-1 gap-6 sm:grid-cols-2">
               <div className="w-full space-y-4">
                 {achievementsLeft.map((item) => (
                   <div
@@ -125,11 +125,11 @@ function Authors() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="mt-auto flex flex-col gap-4">
               {statHighlights.map((stat) => (
                 <GlassCard
                   key={stat.label}
-                  className="flex min-h-[150px] flex-col items-center justify-center gap-3 rounded-3xl border-genii-accent/20 bg-gradient-to-br from-genii-accent/20 via-white/8 to-white/5 px-6 py-7 text-center shadow-soft"
+                  className="flex min-h-[132px] flex-col items-center justify-center gap-3 rounded-3xl border-genii-accent/20 bg-gradient-to-br from-genii-accent/20 via-white/8 to-white/5 px-6 py-6 text-center shadow-soft"
                 >
                   <p className="text-4xl font-semibold text-white sm:text-6xl">{stat.label}</p>
                   <p className="max-w-[12rem] text-xs uppercase tracking-[0.28em] text-genii-light/70">
