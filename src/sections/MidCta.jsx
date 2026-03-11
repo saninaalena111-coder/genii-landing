@@ -5,7 +5,7 @@ import { courseInfo } from '../data/content';
 function MidCta() {
   return (
     <section className="relative py-12 sm:py-16">
-  <div className="mx-auto flex w-full max-w-[900px] flex-col gap-6 rounded-3xl border border-white/15 bg-white/10 px-6 py-10 text-center shadow-card sm:px-10">
+  <div className="mx-auto flex w-full max-w-[900px] flex-col gap-6 px-6 py-10 text-center sm:px-10">
         <motion.h3
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -6,9 +6,7 @@ function Faq() {
   return (
     <SectionWrapper
       id="faq"
-      label="FAQ"
       title="Ответы на частые вопросы"
-      subtitle="Если остались сомнения, здесь мы сняли основные барьеры."
       className="bg-genii-bg-deep"
     >
       <Accordion items={faqItems} />

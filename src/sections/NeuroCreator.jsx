@@ -25,10 +25,11 @@ function NeuroCreator() {
               <span className="icon-wrap icon-glow h-6 w-6 text-genii-accent">
                 <Orbit className="h-4 w-4" />
               </span>
-              <span className="text-sm uppercase tracking-[0.3em]">Профессия 2026</span>
+              <span className="text-[11px] font-medium uppercase tracking-[0.5em] text-genii-muted">Профессия 2026</span>
             </div>
-            <h3 className="text-2xl font-semibold text-white sm:text-3xl">
-              Нейро-креатор — тот, кто создаёт контент нового поколения.
+            <h3 className="text-2xl font-semibold leading-snug tracking-[-0.01em] text-white sm:text-3xl">
+              <em className="italic-accent">Нейро-креатор</em> — тот, кто создаёт{' '}
+              <span className="phrase-accent">контент нового поколения</span>.
             </h3>
             <p className="text-sm text-genii-muted sm:text-base">{courseInfo.tagline}</p>
             <div className="grid gap-4 sm:grid-cols-2">

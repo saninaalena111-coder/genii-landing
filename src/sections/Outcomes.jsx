@@ -1,44 +1,80 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { Check } from 'lucide-react';
 import SectionWrapper from '../components/SectionWrapper';
-import { outcomes } from '../data/content';
+
+const fu = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay },
+});
+
+const results = [
+  'минимум 3 качественных AI-видео в портфолио',
+  'понимание современных нейросетей',
+  'передовые навыки создания визуального контента',
+  'крепкая база для развития как нейро-креатора',
+];
+
+const finalResult = {
+  main: 'поддержка лучших учеников в наших социальных сетях',
+  sub: 'и возможность получить реальный заказ',
+};
+
+function ResultCard({ text, delay }) {
+  return (
+    <motion.div {...fu(delay)}>
+      <div className="flex items-start gap-5 py-5">
+        <div className="relative flex-shrink-0 mt-0.5">
+          <div className="absolute inset-0 rounded-full bg-white/10 blur-md" />
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/8">
+            <Check className="h-5 w-5 text-genii-accent" strokeWidth={2.5} />
+          </div>
+        </div>
+        <p className="text-base leading-[1.7] text-genii-light sm:text-lg">{text}</p>
+      </div>
+      <div className="h-px bg-gradient-to-r from-white/8 via-white/4 to-transparent" />
+    </motion.div>
+  );
+}
 
 function Outcomes() {
   return (
     <SectionWrapper
       id="outcomes"
-      label="Что будет через 4 недели"
-      title="Трансформация в нейро-креатора"
-      subtitle="Вы выйдете с понятной системой и портфолио, которое можно показывать клиентам или брендам."
+      title="Через 4 недели у вас будет:"
       className="bg-genii-bg-deep"
     >
-      <motion.ol
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        className="relative mx-auto flex max-w-4xl flex-col gap-8 text-base text-genii-light sm:text-lg lg:grid lg:grid-cols-2 lg:gap-10 lg:text-xl"
-      >
-        {outcomes.map((item, index) => (
-          <li
-            key={item}
-            className="relative flex gap-5 pl-14 lg:gap-6 lg:pl-0"
-          >
-            <div className="absolute left-0 top-1 flex h-10 w-10 items-center justify-center rounded-full border border-genii-accent/40 bg-genii-accent/10 text-xs font-semibold tracking-[0.3em] text-genii-accent lg:static lg:h-12 lg:w-12 lg:text-sm">
-              {String(index + 1).padStart(2, '0')}
-            </div>
-            {index < outcomes.length - 1 && (
-              <span className="absolute left-5 top-12 hidden h-[calc(100%-2.75rem)] w-px bg-white/10 sm:block lg:hidden" />
-            )}
-            <div className="space-y-2 lg:pl-6 lg:border-l lg:border-white/10">
-              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-genii-light/50">
-                Этап {index + 1}
-                <ArrowUpRight className="h-3.5 w-3.5" />
-              </div>
-              <p className="leading-relaxed">{item}</p>
-            </div>
-          </li>
+      {/* Clean rows — no cards */}
+      <div className="mx-auto flex max-w-2xl flex-col">
+        {results.map((item, i) => (
+          <ResultCard key={i} text={item} delay={0.05 + i * 0.1} />
         ))}
-      </motion.ol>
+      </div>
+
+      {/* Final wide highlighted card */}
+      <motion.div {...fu(0.05 + results.length * 0.1)}>
+        <div className="relative overflow-hidden rounded-2xl border border-genii-accent/30 bg-genii-accent/10 p-6 sm:p-8">
+          {/* Glow */}
+          <div className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-genii-accent/10 via-transparent to-transparent" />
+          <div className="flex items-start gap-5">
+            <div className="relative flex-shrink-0 mt-0.5">
+              <div className="absolute inset-0 rounded-full bg-genii-accent/35 blur-lg" />
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-genii-accent/50 bg-genii-accent/25">
+                <Check className="h-5 w-5 text-genii-accent" strokeWidth={2.5} />
+              </div>
+            </div>
+            <div>
+              <p className="text-lg font-semibold leading-relaxed text-white sm:text-xl lg:text-2xl">
+                {finalResult.main}
+              </p>
+              <p className="mt-1.5 text-base leading-relaxed text-genii-muted sm:text-lg">
+                {finalResult.sub}
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </SectionWrapper>
   );
 }

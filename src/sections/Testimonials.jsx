@@ -19,10 +19,14 @@ function Testimonials() {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+  // Detect touch/mobile device once — skip RAF+drag on touch, let native scroll handle it
+  const isTouchDevice = useRef(
+    typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+  );
 
   useEffect(() => {
     const container = scrollRef.current;
-    if (!container || isPaused) return undefined;
+    if (!container || isPaused || isTouchDevice.current) return undefined;
     let frameId;
     let lastTimestamp = 0;
 
@@ -46,6 +50,8 @@ function Testimonials() {
   }, [isPaused]);
 
   const handlePointerDown = (event) => {
+    // On touch devices let the browser handle native momentum scroll
+    if (isTouchDevice.current) return;
     const container = scrollRef.current;
     if (!container) return;
     isDragging.current = true;
@@ -55,7 +61,7 @@ function Testimonials() {
   };
 
   const handlePointerMove = (event) => {
-    if (!isDragging.current) return;
+    if (isTouchDevice.current || !isDragging.current) return;
     const container = scrollRef.current;
     if (!container) return;
     const x = event.pageX - container.offsetLeft;
@@ -70,7 +76,6 @@ function Testimonials() {
   return (
     <SectionWrapper
       id="testimonials"
-      label="Отзывы"
       title="Отзывы учеников"
       subtitle="Скриншоты с реальными результатами и впечатлениями выпускников."
     >
@@ -81,7 +86,8 @@ function Testimonials() {
       >
         <div
           ref={scrollRef}
-          className="no-scrollbar flex gap-6 overflow-x-auto scroll-smooth px-1 pb-4 pt-2 snap-x snap-mandatory"
+          className="no-scrollbar flex gap-6 overflow-x-auto px-1 pb-4 pt-2 md:snap-x md:snap-mandatory"
+          style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch' }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -91,7 +97,7 @@ function Testimonials() {
             <motion.div
               key={`${src}-${index}`}
               whileHover={{ y: -6 }}
-              className="relative flex h-[360px] min-w-[220px] snap-center items-center justify-center rounded-2xl border border-white/12 bg-white/[0.04] p-5 shadow-[0_18px_38px_rgba(123,23,35,0.22)] sm:h-[380px] sm:min-w-[240px] lg:h-[400px] lg:min-w-[260px] xl:h-[420px] xl:min-w-[280px]"
+              className="relative flex h-[360px] min-w-[220px] md:snap-center items-center justify-center rounded-2xl border border-white/12 bg-white/[0.04] p-5 shadow-[0_18px_38px_rgba(123,23,35,0.22)] sm:h-[380px] sm:min-w-[240px] lg:h-[400px] lg:min-w-[260px] xl:h-[420px] xl:min-w-[280px]"
             >
               <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
               <div className="pointer-events-none absolute -bottom-10 right-8 h-20 w-20 rounded-full bg-genii-accent/20 blur-[40px]" />
