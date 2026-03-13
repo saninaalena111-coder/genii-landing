@@ -220,8 +220,9 @@ export default function StudentCarousel() {
 
               const borderColor = isCenter ? 'rgba(155,40,55,0.80)' : 'rgba(255,255,255,0.07)';
 
-              // Only autoPlay the 3 nearest cards to reduce CPU load
-              const shouldPlay = dist <= 1;
+              // Only autoPlay center ± 1 cards; preload metadata for ± 2; none beyond that
+              const shouldPlay    = dist <= 1;
+              const shouldPreload = dist <= 2;
 
               return (
                 <div
@@ -254,13 +255,13 @@ export default function StudentCarousel() {
                       loop
                       playsInline
                       autoPlay={shouldPlay}
-                      preload="metadata"
+                      preload={shouldPreload ? 'metadata' : 'none'}
                       className="h-full w-full object-cover"
                       draggable={false}
                       style={{ pointerEvents: 'none' }}
                       onLoadedMetadata={(e) => {
-                        // Show first frame as preview for non-autoplaying cards
-                        if (!shouldPlay) e.currentTarget.currentTime = 0.001;
+                        // Show first frame as preview for cards that load metadata but don't autoplay
+                        if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
                       }}
                     />
                     {/* Bottom gradient */}

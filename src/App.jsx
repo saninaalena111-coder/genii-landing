@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import HeroVideoBlock from './sections/HeroVideoBlock';
 import Authors from './sections/Authors';
 import ExpertCarousel from './sections/ExpertCarousel';
@@ -23,6 +24,17 @@ import ConsentPage from './pages/ConsentPage';
 import OfertaPage from './pages/OfertaPage';
 
 function Landing() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  const sharedVideoSrc = isMobile
+    ? '/media/videos/Hero2-mobile.mp4'
+    : '/media/videos/Hero2-web.mp4';
+
   return (
     <div className="min-h-screen bg-genii-bg text-white">
       <CursorGlow />
@@ -48,7 +60,7 @@ function Landing() {
             muted
             loop
             playsInline
-            src="/media/students/videos/IMG_0728.MP4"
+            src={sharedVideoSrc}
             style={{
               position: 'absolute',
               inset: 0,

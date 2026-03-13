@@ -1,10 +1,22 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Hero from './Hero';
 import WorldShift from './WorldShift';
 
 function HeroVideoBlock() {
   const wrapperRef = useRef(null);
+
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const videoSrc = isMobile
+    ? '/media/videos/Hero-mobile.mp4'
+    : '/media/videos/Hero-web.mp4';
 
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
@@ -45,7 +57,7 @@ function HeroVideoBlock() {
             playsInline
             className="h-full w-full object-cover object-center"
           >
-            <source src="/media/videos/Hero.MP4" type="video/mp4" />
+            <source src={videoSrc} type="video/mp4" />
           </video>
         </motion.div>
 

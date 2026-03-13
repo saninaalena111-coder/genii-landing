@@ -262,6 +262,10 @@ function ExpertCarousel() {
               const blur    = dist <= 1  ? 0    : dist === 2 ? 1.5  : 3;
               const zIdx    = 10 - Math.min(dist, 4) * 2;
 
+              // Only autoPlay center ± 1; preload metadata for ± 2; none beyond
+              const shouldPlay    = dist <= 1;
+              const shouldPreload = dist <= 2;
+
               const shadow = isCenter
                 ? isVideo
                   ? '0 0 70px rgba(123,23,35,0.70), 0 0 28px rgba(123,23,35,0.40), 0 28px 56px rgba(0,0,0,0.60)'
@@ -304,11 +308,14 @@ function ExpertCarousel() {
                           muted
                           loop
                           playsInline
-                          autoPlay
-                          preload="metadata"
+                          autoPlay={shouldPlay}
+                          preload={shouldPreload ? 'metadata' : 'none'}
                           className="h-full w-full object-cover"
                           draggable={false}
                           style={{ pointerEvents: 'none' }}
+                          onLoadedMetadata={(e) => {
+                            if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
+                          }}
                         />
                         {/* Bottom gradient glow */}
                         <div
