@@ -2,45 +2,39 @@
  * Vercel Serverless Function
  * GET /api/xl/order-created
  *
- * Safe test endpoint for incoming Prodamus XL webhooks.
- * Logs all received params and returns them in the response.
- * No external API calls — safe for initial testing.
+ * TEMPORARY DEBUG ENDPOINT for Prodamus XL webhook testing.
+ * Always returns HTTP 200. Logs everything XL sends.
+ * No validation, no external API calls.
  *
- * Query params accepted:
- *   tg_id       (required)
- *   cuid        (optional)
- *   contact_id  (optional)
- *   email       (optional)
- *   phone       (optional)
+ * Remove / replace this version once tg_id delivery is confirmed.
  */
 
 export default async function handler(req, res) {
   try {
     const { tg_id, cuid, contact_id, email, phone } = req.query;
+    const allQuery = req.query;
 
-    console.log('[xl/order-created] Incoming webhook params:', {
-      tg_id,
-      cuid,
-      contact_id,
-      email,
-      phone,
-    });
-
-    if (!tg_id) {
-      console.warn('[xl/order-created] Missing required param: tg_id');
-      return res.status(400).json({ error: 'tg_id is required' });
-    }
+    console.log('[xl/order-created] ── DEBUG WEBHOOK HIT ──────────────────');
+    console.log('[xl/order-created] Full URL:', req.url);
+    console.log('[xl/order-created] All query params:', JSON.stringify(allQuery, null, 2));
+    console.log('[xl/order-created] Known params:');
+    console.log('  tg_id      =', tg_id      ?? '(missing)');
+    console.log('  cuid       =', cuid       ?? '(missing)');
+    console.log('  contact_id =', contact_id ?? '(missing)');
+    console.log('  email      =', email      ?? '(missing)');
+    console.log('  phone      =', phone      ?? '(missing)');
+    console.log('[xl/order-created] ─────────────────────────────────────────');
 
     return res.status(200).json({
-      status: 'ok',
-      action: 'order_created_received',
+      status: 'debug_ok',
       received: {
-        tg_id: tg_id ?? null,
-        cuid: cuid ?? null,
+        tg_id:      tg_id      ?? null,
+        cuid:       cuid       ?? null,
         contact_id: contact_id ?? null,
-        email: email ?? null,
-        phone: phone ?? null,
+        email:      email      ?? null,
+        phone:      phone      ?? null,
       },
+      allQuery,
     });
   } catch (err) {
     console.error('[xl/order-created] Unexpected error:', err);
