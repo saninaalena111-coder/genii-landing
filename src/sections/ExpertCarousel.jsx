@@ -13,10 +13,17 @@ const _expertVids = import.meta.glob(
   { eager: true, query: '?url', import: 'default' }
 );
 
-// One card per original file; -web/-mobile are source variants, not separate entries
+// Only -web.mp4 files are base items; -mobile.mp4 is the mobile source variant
 const _allExpertVidKeys = Object.keys(_expertVids).sort();
-const _baseExpertVidKeys = _allExpertVidKeys.filter(k => !/-(?:web|mobile)\.[^.]+$/.test(k));
-const _isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+const _webExpertVidKeys = _allExpertVidKeys.filter(k => /-web\.mp4$/.test(k));
+
+const _imgs = Object.keys(_expertImgs).sort().map(k => ({ type: 'image', src: _expertImgs[k] }));
+const _vids = _webExpertVidKeys.map(k => {
+  const mobileKey = k.replace(/-web\.mp4$/, '-mobile.mp4');
+  const mobileSrc = _expertVids[mobileKey] || null;
+  const webSrc = _expertVids[k];
+  return { type: 'video', webSrc, mobileSrc, src: webSrc };
+});
 
 // Interleave images and videos so they alternate more naturally
 function interleave(images, videos) {
@@ -36,18 +43,6 @@ function interleave(images, videos) {
   }
   return result;
 }
-
-const _imgs = Object.keys(_expertImgs).sort().map(k => ({ type: 'image', src: _expertImgs[k] }));
-const _vids = _baseExpertVidKeys.map(k => {
-  const ext = k.match(/\.[^.]+$/)[0];
-  const webKey = k.replace(ext, `-web${ext.toLowerCase()}`);
-  const mobileKey = k.replace(ext, `-mobile${ext.toLowerCase()}`);
-  const webSrc = _expertVids[webKey] || null;
-  const mobileSrc = _expertVids[mobileKey] || null;
-  const previewSrc = _isMobile ? (mobileSrc || webSrc || _expertVids[k]) : (webSrc || _expertVids[k]);
-  const modalSrc = webSrc || _expertVids[k];
-  return { type: 'video', src: _expertVids[k], previewSrc, modalSrc };
-});
 
 const baseItems = interleave(_imgs, _vids);
 
@@ -102,13 +97,14 @@ function ExpandedPlayer({ item, onClose }) {
              * key={item.src} guarantees a fresh <video> element each time.
              */}
             <video
-              key={item.src}
-              src={item.modalSrc || item.src}
+              key={item.webSrc || item.src}
               controls
               playsInline
               preload="auto"
               className="aspect-[9/16] w-full bg-black object-contain"
-            />
+            >
+              <source src={item.webSrc || item.src} type="video/mp4" />
+            </video>
           </div>
 
           {/* Close button */}
@@ -330,7 +326,7 @@ function ExpertCarousel() {
                       <>
                         {isVisible ? (
                           <video
-                            src={item.previewSrc || item.src}
+                            key={item.webSrc}
                             muted
                             loop
                             playsInline
@@ -342,7 +338,12 @@ function ExpertCarousel() {
                             onLoadedMetadata={(e) => {
                               if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
                             }}
-                          />
+                          >
+                            {item.mobileSrc && (
+                              <source src={item.mobileSrc} media="(max-width: 768px)" type="video/mp4" />
+                            )}
+                            <source src={item.webSrc} type="video/mp4" />
+                          </video>
                         ) : (
                           <div className="h-full w-full" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '16px' }} />
                         )}

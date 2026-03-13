@@ -9,20 +9,15 @@ const _studentVids = import.meta.glob(
   { eager: true, query: '?url', import: 'default' }
 );
 
-// One card per original file; -web/-mobile are source variants, not separate entries
+// Only -web.mp4 files are base items; -mobile.mp4 is the mobile source variant
 const _allVidKeys = Object.keys(_studentVids).sort();
-const _baseVidKeys = _allVidKeys.filter(k => !/-(?:web|mobile)\.[^.]+$/.test(k));
-const _isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+const _webVidKeys = _allVidKeys.filter(k => /-web\.mp4$/.test(k));
 
-const baseItems = _baseVidKeys.map(k => {
-  const ext = k.match(/\.[^.]+$/)[0];
-  const webKey = k.replace(ext, `-web${ext.toLowerCase()}`);
-  const mobileKey = k.replace(ext, `-mobile${ext.toLowerCase()}`);
-  const webSrc = _studentVids[webKey] || null;
+const baseItems = _webVidKeys.map(k => {
+  const mobileKey = k.replace(/-web\.mp4$/, '-mobile.mp4');
   const mobileSrc = _studentVids[mobileKey] || null;
-  const previewSrc = _isMobile ? (mobileSrc || webSrc || _studentVids[k]) : (webSrc || _studentVids[k]);
-  const modalSrc = webSrc || _studentVids[k];
-  return { type: 'video', src: _studentVids[k], previewSrc, modalSrc };
+  const webSrc = _studentVids[k];
+  return { type: 'video', webSrc, mobileSrc, src: webSrc };
 });
 
 const BASE_COUNT = baseItems.length;
@@ -66,13 +61,14 @@ function ExpandedPlayer({ item, onClose }) {
             style={{ boxShadow: '0 0 100px rgba(123,23,35,0.38), 0 48px 80px rgba(0,0,0,0.76)' }}
           >
             <video
-              key={item.src}
-              src={item.modalSrc || item.src}
+              key={item.webSrc || item.src}
               controls
               playsInline
               preload="auto"
               className="aspect-[9/16] w-full bg-black object-contain"
-            />
+            >
+              <source src={item.webSrc || item.src} type="video/mp4" />
+            </video>
           </div>
           <button
             onClick={onClose}
@@ -274,7 +270,7 @@ export default function StudentCarousel() {
                   <div className="aspect-[9/16] w-full bg-genii-bg-deep">
                     {isVisible ? (
                       <video
-                        src={item.previewSrc || item.src}
+                        key={item.webSrc}
                         muted
                         loop
                         playsInline
@@ -286,7 +282,12 @@ export default function StudentCarousel() {
                         onLoadedMetadata={(e) => {
                           if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
                         }}
-                      />
+                      >
+                        {item.mobileSrc && (
+                          <source src={item.mobileSrc} media="(max-width: 768px)" type="video/mp4" />
+                        )}
+                        <source src={item.webSrc} type="video/mp4" />
+                      </video>
                     ) : (
                       <div className="h-full w-full" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '16px' }} />
                     )}
