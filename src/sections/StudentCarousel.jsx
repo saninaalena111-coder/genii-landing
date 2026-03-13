@@ -8,6 +8,10 @@ const _studentVids = import.meta.glob(
   '/public/media/students/videos/*.{mp4,MP4,mov,MOV,webm,WEBM}',
   { eager: true, query: '?url', import: 'default' }
 );
+const _studentPosters = import.meta.glob(
+  '/public/media/students/videos/*.{jpg,jpeg,JPG,JPEG}',
+  { eager: true, query: '?url', import: 'default' }
+);
 
 // Only -web.mp4 files are base items; -mobile.mp4 is the mobile source variant
 const _allVidKeys = Object.keys(_studentVids).sort();
@@ -17,7 +21,9 @@ const baseItems = _webVidKeys.map(k => {
   const mobileKey = k.replace(/-web\.mp4$/, '-mobile.mp4');
   const mobileSrc = _studentVids[mobileKey] || null;
   const webSrc = _studentVids[k];
-  return { type: 'video', webSrc, mobileSrc, src: webSrc };
+  const posterKey = k.replace(/-web\.mp4$/, '.jpg');
+  const posterSrc = _studentPosters[posterKey] || null;
+  return { type: 'video', webSrc, mobileSrc, src: webSrc, posterSrc };
 });
 
 const BASE_COUNT = baseItems.length;
@@ -96,7 +102,6 @@ export default function StudentCarousel() {
   const autoScrollRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(BASE_COUNT);
   const [modalItem, setModalItem] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
 
   const slotWidth = CARD_W + GAP;
 
@@ -155,14 +160,7 @@ export default function StudentCarousel() {
   }, []); // eslint-disable-line
 
   // Lazy-load: render videos only when section enters viewport
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
-      { root: null, rootMargin: '300px 0px', threshold: 0.05 }
-    );
-    if (scrollRef.current) observer.observe(scrollRef.current);
-    return () => observer.disconnect();
-  }, []);
+  // (no longer needed — poster images used as previews)
 
   const onPointerDown = (e) => {
     const el = scrollRef.current;
@@ -268,26 +266,15 @@ export default function StudentCarousel() {
                   }}
                 >
                   <div className="aspect-[9/16] w-full bg-genii-bg-deep">
-                    {isVisible ? (
-                      <video
-                        key={item.webSrc}
-                        muted
-                        loop
-                        playsInline
-                        autoPlay={shouldPlay}
-                        preload={shouldPreload ? 'metadata' : 'none'}
+                    {item.posterSrc ? (
+                      <img
+                        src={item.posterSrc}
+                        alt="превью видео"
                         className="h-full w-full object-cover"
+                        loading="lazy"
                         draggable={false}
                         style={{ pointerEvents: 'none' }}
-                        onLoadedMetadata={(e) => {
-                          if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
-                        }}
-                      >
-                        {item.mobileSrc && (
-                          <source src={item.mobileSrc} media="(max-width: 768px)" type="video/mp4" />
-                        )}
-                        <source src={item.webSrc} type="video/mp4" />
-                      </video>
+                      />
                     ) : (
                       <div className="h-full w-full" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '16px' }} />
                     )}
