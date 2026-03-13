@@ -13,6 +13,11 @@ const _expertVids = import.meta.glob(
   { eager: true, query: '?url', import: 'default' }
 );
 
+// One card per original file; -web/-mobile are source variants, not separate entries
+const _allExpertVidKeys = Object.keys(_expertVids).sort();
+const _baseExpertVidKeys = _allExpertVidKeys.filter(k => !/-(?:web|mobile)\.[^.]+$/.test(k));
+const _isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
 // Interleave images and videos so they alternate more naturally
 function interleave(images, videos) {
   if (!videos.length) return images;
@@ -33,7 +38,16 @@ function interleave(images, videos) {
 }
 
 const _imgs = Object.keys(_expertImgs).sort().map(k => ({ type: 'image', src: _expertImgs[k] }));
-const _vids = Object.keys(_expertVids).sort().map(k => ({ type: 'video', src: _expertVids[k] }));
+const _vids = _baseExpertVidKeys.map(k => {
+  const ext = k.match(/\.[^.]+$/)[0];
+  const webKey = k.replace(ext, `-web${ext.toLowerCase()}`);
+  const mobileKey = k.replace(ext, `-mobile${ext.toLowerCase()}`);
+  const webSrc = _expertVids[webKey] || null;
+  const mobileSrc = _expertVids[mobileKey] || null;
+  const previewSrc = _isMobile ? (mobileSrc || webSrc || _expertVids[k]) : (webSrc || _expertVids[k]);
+  const modalSrc = webSrc || _expertVids[k];
+  return { type: 'video', src: _expertVids[k], previewSrc, modalSrc };
+});
 
 const baseItems = interleave(_imgs, _vids);
 
@@ -89,7 +103,7 @@ function ExpandedPlayer({ item, onClose }) {
              */}
             <video
               key={item.src}
-              src={item.src}
+              src={item.modalSrc || item.src}
               controls
               playsInline
               preload="auto"
@@ -126,6 +140,7 @@ function ExpertCarousel() {
   const autoScrollRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(BASE_COUNT);
   const [modalItem, setModalItem] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const slotWidth = CARD_W + GAP;
 
@@ -187,6 +202,16 @@ function ExpertCarousel() {
     });
     return () => cancelAnimationFrame(raf);
   }, []); // eslint-disable-line
+
+  // Lazy-load: render videos only when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      { root: null, rootMargin: '300px 0px', threshold: 0.05 }
+    );
+    if (scrollRef.current) observer.observe(scrollRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const onPointerDown = (e) => {
     const el = scrollRef.current;
@@ -303,20 +328,24 @@ function ExpertCarousel() {
                   <div className="aspect-[9/16] w-full bg-genii-bg-deep">
                     {isVideo ? (
                       <>
-                        <video
-                          src={item.src}
-                          muted
-                          loop
-                          playsInline
-                          autoPlay={shouldPlay}
-                          preload={shouldPreload ? 'metadata' : 'none'}
-                          className="h-full w-full object-cover"
-                          draggable={false}
-                          style={{ pointerEvents: 'none' }}
-                          onLoadedMetadata={(e) => {
-                            if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
-                          }}
-                        />
+                        {isVisible ? (
+                          <video
+                            src={item.previewSrc || item.src}
+                            muted
+                            loop
+                            playsInline
+                            autoPlay={shouldPlay}
+                            preload={shouldPreload ? 'metadata' : 'none'}
+                            className="h-full w-full object-cover"
+                            draggable={false}
+                            style={{ pointerEvents: 'none' }}
+                            onLoadedMetadata={(e) => {
+                              if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
+                            }}
+                          />
+                        ) : (
+                          <div className="h-full w-full" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '16px' }} />
+                        )}
                         {/* Bottom gradient glow */}
                         <div
                           className="pointer-events-none absolute inset-0"

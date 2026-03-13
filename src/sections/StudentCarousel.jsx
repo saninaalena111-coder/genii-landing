@@ -9,9 +9,21 @@ const _studentVids = import.meta.glob(
   { eager: true, query: '?url', import: 'default' }
 );
 
-const baseItems = Object.keys(_studentVids)
-  .sort()
-  .map(k => ({ type: 'video', src: _studentVids[k] }));
+// One card per original file; -web/-mobile are source variants, not separate entries
+const _allVidKeys = Object.keys(_studentVids).sort();
+const _baseVidKeys = _allVidKeys.filter(k => !/-(?:web|mobile)\.[^.]+$/.test(k));
+const _isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+const baseItems = _baseVidKeys.map(k => {
+  const ext = k.match(/\.[^.]+$/)[0];
+  const webKey = k.replace(ext, `-web${ext.toLowerCase()}`);
+  const mobileKey = k.replace(ext, `-mobile${ext.toLowerCase()}`);
+  const webSrc = _studentVids[webKey] || null;
+  const mobileSrc = _studentVids[mobileKey] || null;
+  const previewSrc = _isMobile ? (mobileSrc || webSrc || _studentVids[k]) : (webSrc || _studentVids[k]);
+  const modalSrc = webSrc || _studentVids[k];
+  return { type: 'video', src: _studentVids[k], previewSrc, modalSrc };
+});
 
 const BASE_COUNT = baseItems.length;
 const allItems = [...baseItems, ...baseItems, ...baseItems];
@@ -55,7 +67,7 @@ function ExpandedPlayer({ item, onClose }) {
           >
             <video
               key={item.src}
-              src={item.src}
+              src={item.modalSrc || item.src}
               controls
               playsInline
               preload="auto"
@@ -88,6 +100,7 @@ export default function StudentCarousel() {
   const autoScrollRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(BASE_COUNT);
   const [modalItem, setModalItem] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const slotWidth = CARD_W + GAP;
 
@@ -144,6 +157,16 @@ export default function StudentCarousel() {
     });
     return () => cancelAnimationFrame(raf);
   }, []); // eslint-disable-line
+
+  // Lazy-load: render videos only when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      { root: null, rootMargin: '300px 0px', threshold: 0.05 }
+    );
+    if (scrollRef.current) observer.observe(scrollRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const onPointerDown = (e) => {
     const el = scrollRef.current;
@@ -249,21 +272,24 @@ export default function StudentCarousel() {
                   }}
                 >
                   <div className="aspect-[9/16] w-full bg-genii-bg-deep">
-                    <video
-                      src={item.src}
-                      muted
-                      loop
-                      playsInline
-                      autoPlay={shouldPlay}
-                      preload={shouldPreload ? 'metadata' : 'none'}
-                      className="h-full w-full object-cover"
-                      draggable={false}
-                      style={{ pointerEvents: 'none' }}
-                      onLoadedMetadata={(e) => {
-                        // Show first frame as preview for cards that load metadata but don't autoplay
-                        if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
-                      }}
-                    />
+                    {isVisible ? (
+                      <video
+                        src={item.previewSrc || item.src}
+                        muted
+                        loop
+                        playsInline
+                        autoPlay={shouldPlay}
+                        preload={shouldPreload ? 'metadata' : 'none'}
+                        className="h-full w-full object-cover"
+                        draggable={false}
+                        style={{ pointerEvents: 'none' }}
+                        onLoadedMetadata={(e) => {
+                          if (!shouldPlay && shouldPreload) e.currentTarget.currentTime = 0.001;
+                        }}
+                      />
+                    ) : (
+                      <div className="h-full w-full" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '16px' }} />
+                    )}
                     {/* Bottom gradient */}
                     <div
                       className="pointer-events-none absolute inset-0"
