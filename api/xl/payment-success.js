@@ -3,14 +3,16 @@
  * GET|POST /api/xl/payment-success
  *
  * Prodamus XL webhook: payment successful event.
- * Adds BotHelp tag `payment_success` to the subscriber by tg_id.
+ * Adds BotHelp tag `payment_success` to the subscriber identified by cuid.
  *
- * Required env variable:
- *   BOTHELP_TOKEN — BotHelp API Bearer token
+ * Required env variables:
+ *   BOTHELP_CLIENT_ID     — BotHelp OAuth2 client ID
+ *   BOTHELP_CLIENT_SECRET — BotHelp OAuth2 client secret
+ *   BOTHELP_API_BASE      — BotHelp Open API base URL (e.g. https://api.bothelp.io)
  *
  * Params (query or body):
- *   tg_id      (required)
- *   cuid       (optional)
+ *   cuid       (required)
+ *   tg_id      (optional)
  *   contact_id (optional)
  *   email      (optional)
  *   phone      (optional)
@@ -18,7 +20,8 @@
  *   product    (optional)
  */
 
-const BOTHELP_TAG_URL = 'https://bothelp.io/widget/api/v2/tag-subscriber';
+import { addTagByCuid } from '../_bothelp.js';
+
 const TAG = 'payment_success';
 
 export default async function handler(req, res) {
@@ -26,8 +29,8 @@ export default async function handler(req, res) {
     const source = req.method === 'POST' ? req.body : req.query;
 
     const {
-      tg_id,
       cuid,
+      tg_id,
       contact_id,
       email,
       phone,
@@ -36,47 +39,24 @@ export default async function handler(req, res) {
     } = source ?? {};
 
     console.log('[xl/payment-success] Incoming webhook:', req.method, req.url);
-    console.log('[xl/payment-success] Params:', { tg_id, cuid, contact_id, email, phone, order_id, product });
+    console.log('[xl/payment-success] Params:', { cuid, tg_id, contact_id, email, phone, order_id, product });
 
-    if (!tg_id) {
-      console.warn('[xl/payment-success] Missing required param: tg_id');
-      return res.status(400).json({ error: 'tg_id missing' });
+    if (!cuid) {
+      console.warn('[xl/payment-success] Missing required param: cuid');
+      return res.status(400).json({ error: 'cuid missing' });
     }
 
-    const token = process.env.BOTHELP_TOKEN;
-    if (!token) {
-      console.error('[xl/payment-success] BOTHELP_TOKEN env variable is not set');
-      return res.status(500).json({ error: 'Server configuration error' });
-    }
+    await addTagByCuid(cuid, TAG);
 
-    const bhResponse = await fetch(BOTHELP_TAG_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        telegram_id: tg_id,
-        tag: TAG,
-      }),
-    });
-
-    if (!bhResponse.ok) {
-      const errorText = await bhResponse.text();
-      console.error(`[xl/payment-success] BotHelp API error ${bhResponse.status}:`, errorText);
-      return res.status(502).json({ error: 'BotHelp API request failed', detail: errorText });
-    }
-
-    console.log(`[xl/payment-success] Tag "${TAG}" added successfully for tg_id=${tg_id}`);
+    console.log(`[xl/payment-success] Tag "${TAG}" successfully sent for cuid=${cuid}`);
 
     return res.status(200).json({
       status: 'ok',
       event: 'payment_success_sent',
-      tg_id: tg_id ?? null,
-      order_id: order_id ?? null,
+      cuid,
     });
   } catch (err) {
-    console.error('[xl/payment-success] Unexpected error:', err);
+    console.error('[xl/payment-success] Unexpected error:', err.message ?? err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 }

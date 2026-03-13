@@ -3,68 +3,48 @@
  * GET /api/xl/order-created
  *
  * Prodamus XL webhook: order created event.
- * Adds BotHelp tag `payment_opened` to the subscriber by tg_id.
+ * Adds BotHelp tag `payment_opened` to the subscriber identified by cuid.
  *
- * Required env variable:
- *   BOTHELP_TOKEN — BotHelp API Bearer token
+ * Required env variables:
+ *   BOTHELP_CLIENT_ID     — BotHelp OAuth2 client ID
+ *   BOTHELP_CLIENT_SECRET — BotHelp OAuth2 client secret
+ *   BOTHELP_API_BASE      — BotHelp Open API base URL (e.g. https://api.bothelp.io)
  *
  * Query params:
- *   tg_id      (required)
- *   cuid       (optional)
+ *   cuid       (required)
+ *   tg_id      (optional)
  *   contact_id (optional)
  *   email      (optional)
  *   phone      (optional)
  */
 
-const BOTHELP_TAG_URL = 'https://bothelp.io/widget/api/v2/tag-subscriber';
+import { addTagByCuid } from '../_bothelp.js';
+
 const TAG = 'payment_opened';
 
 export default async function handler(req, res) {
   try {
-    const { tg_id, cuid, contact_id, email, phone } = req.query;
+    const { cuid, tg_id, contact_id, email, phone } = req.query;
 
     console.log('[xl/order-created] Incoming webhook:', req.url);
-    console.log('[xl/order-created] Params:', { tg_id, cuid, contact_id, email, phone });
+    console.log('[xl/order-created] Params:', { cuid, tg_id, contact_id, email, phone });
 
-    if (!tg_id) {
-      console.warn('[xl/order-created] Missing required param: tg_id');
-      return res.status(400).json({ error: 'tg_id missing' });
+    if (!cuid) {
+      console.warn('[xl/order-created] Missing required param: cuid');
+      return res.status(400).json({ error: 'cuid missing' });
     }
 
-    const token = process.env.BOTHELP_TOKEN;
-    if (!token) {
-      console.error('[xl/order-created] BOTHELP_TOKEN env variable is not set');
-      return res.status(500).json({ error: 'Server configuration error' });
-    }
+    await addTagByCuid(cuid, TAG);
 
-    const bhResponse = await fetch(BOTHELP_TAG_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        telegram_id: tg_id,
-        tag: TAG,
-      }),
-    });
-
-    if (!bhResponse.ok) {
-      const errorText = await bhResponse.text();
-      console.error(`[xl/order-created] BotHelp API error ${bhResponse.status}:`, errorText);
-      return res.status(502).json({ error: 'BotHelp API request failed', detail: errorText });
-    }
-
-    console.log(`[xl/order-created] Tag "${TAG}" added successfully for tg_id=${tg_id}`);
+    console.log(`[xl/order-created] Tag "${TAG}" successfully sent for cuid=${cuid}`);
 
     return res.status(200).json({
       status: 'ok',
       event: 'payment_opened_sent',
-      tg_id: tg_id ?? null,
-      contact_id: contact_id ?? null,
+      cuid,
     });
   } catch (err) {
-    console.error('[xl/order-created] Unexpected error:', err);
+    console.error('[xl/order-created] Unexpected error:', err.message ?? err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
