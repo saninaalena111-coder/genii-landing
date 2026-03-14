@@ -2,11 +2,11 @@
  * Vercel Serverless Function
  * GET /api/go-pay
  *
- * Accepts visitor from BotHelp via landing page URL params
- * and redirects to Prodamus XL payment page with required params.
+ * Redirects visitor to Prodamus XL payment page.
+ * Works for both BotHelp traffic (with tg_id/cuid) and organic traffic (without).
  *
  * Query params:
- *   tg_id    (required) — Telegram user ID
+ *   tg_id    (optional) — Telegram user ID from BotHelp
  *   cuid     (optional) — BotHelp contact unique ID
  *   product  (optional) — product slug, default: "genii"
  *
@@ -23,21 +23,22 @@ export default function handler(req, res) {
     console.log('[go-pay] Incoming request:', req.url);
     console.log('[go-pay] Query params:', { tg_id, cuid, product });
 
-    if (!tg_id) {
-      console.warn('[go-pay] Missing required param: tg_id');
-      return res.status(400).json({ error: 'tg_id is required' });
+    let redirectUrl;
+
+    if (tg_id) {
+      const resolvedProduct = product || DEFAULT_PRODUCT;
+      const params = new URLSearchParams();
+      params.set('tg_id', tg_id);
+      if (cuid) params.set('cuid', cuid);
+      params.set('contactData.tg_id', tg_id);
+      if (cuid) params.set('contactData.cuid', cuid);
+      params.set('product', resolvedProduct);
+      redirectUrl = `${XL_BASE_URL}?${params.toString()}`;
+      console.log('[go-pay] BotHelp traffic — redirecting with params');
+    } else {
+      redirectUrl = XL_BASE_URL;
+      console.log('[go-pay] Organic traffic — redirecting without params');
     }
-
-    const resolvedProduct = product || DEFAULT_PRODUCT;
-
-    const params = new URLSearchParams();
-    params.set('tg_id', tg_id);
-    if (cuid) params.set('cuid', cuid);
-    params.set('contactData.tg_id', tg_id);
-    if (cuid) params.set('contactData.cuid', cuid);
-    params.set('product', resolvedProduct);
-
-    const redirectUrl = `${XL_BASE_URL}?${params.toString()}`;
 
     console.log('[go-pay] Redirecting to:', redirectUrl);
 

@@ -191,7 +191,7 @@ function Authors() {
             variants={fadeUp}
             className="flex justify-center lg:justify-start"
           >
-            <PrimaryButton size="large">
+            <PrimaryButton size="large" onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}>
               Стать участником курса
             </PrimaryButton>
           </motion.div>

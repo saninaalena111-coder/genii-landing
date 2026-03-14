@@ -69,7 +69,7 @@ function Hero() {
           className="mt-9 flex w-full max-w-[620px] flex-col items-end gap-2"
         >
           <span className="text-xs font-medium uppercase tracking-[0.45em] text-white/38">{courseInfo.startDate}</span>
-          <PrimaryButton size="large">
+          <PrimaryButton size="large" onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}>
             {courseInfo.cta}
           </PrimaryButton>
         </motion.div>

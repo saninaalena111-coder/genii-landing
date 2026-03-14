@@ -17,7 +17,7 @@ function FinalCta() {
           Создавайте видео нового поколения с помощью нейросетей. Раскрывайте в себе{' '}
           <em className="italic-accent">настоящего творца!</em>
         </motion.h2>
-        <PrimaryButton size="large" fullWidth className="sm:w-auto">
+        <PrimaryButton size="large" fullWidth className="sm:w-auto" onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}>
           Стать ГенИИем
         </PrimaryButton>
         <p className="text-xs uppercase tracking-[0.4em] text-genii-muted">Старт 25 марта</p>

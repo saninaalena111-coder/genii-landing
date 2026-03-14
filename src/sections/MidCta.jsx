@@ -18,7 +18,7 @@ function MidCta() {
           Получите чёткую систему, поддержку авторов и портфолио, которое начнёт работать на вас.
         </p>
         <div className="flex flex-col items-center gap-3">
-          <PrimaryButton size="large" fullWidth className="sm:w-auto">
+          <PrimaryButton size="large" fullWidth className="sm:w-auto" onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}>
             {courseInfo.cta}
           </PrimaryButton>
           <p className="text-xs uppercase tracking-[0.35em] text-genii-muted">
