@@ -20,6 +20,17 @@ function scrollTo(href) {
   }
 }
 
+function buildGoPayUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const tg_id = params.get('tg_id');
+  const cuid = params.get('cuid');
+  const product = params.get('product') || 'genii';
+  const out = new URLSearchParams({ product });
+  if (tg_id) out.set('tg_id', tg_id);
+  if (cuid) out.set('cuid', cuid);
+  return `/api/go-pay?${out.toString()}`;
+}
+
 export default function StickyNav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -77,7 +88,7 @@ export default function StickyNav() {
           {/* Desktop CTA */}
           <div className="hidden md:flex">
             <button
-              onClick={() => handleLink('#final-cta')}
+              onClick={() => { window.location.href = buildGoPayUrl(); }}
               className="rounded-full bg-gradient-to-r from-genii-accent to-[#a01020] px-5 py-2 text-sm font-semibold text-white shadow-[0_0_16px_rgba(123,23,35,0.45)] transition-all duration-200 hover:brightness-110 hover:shadow-[0_0_24px_rgba(123,23,35,0.6)]"
             >
               Стать ГенИИем
@@ -87,7 +98,7 @@ export default function StickyNav() {
           {/* Mobile burger + CTA */}
           <div className="flex items-center gap-3 md:hidden">
             <button
-              onClick={() => handleLink('#final-cta')}
+              onClick={() => { window.location.href = buildGoPayUrl(); }}
               className="rounded-full bg-gradient-to-r from-genii-accent to-[#a01020] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_0_12px_rgba(123,23,35,0.4)]"
             >
               Стать ГенИИем
