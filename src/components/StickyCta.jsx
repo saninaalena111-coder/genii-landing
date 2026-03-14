@@ -25,7 +25,11 @@ function StickyCta({ text, variant = 'neutral' }) {
           <p className="text-[0.6rem] uppercase tracking-[0.4em] text-genii-muted">{content.label}</p>
           <p className="text-sm font-semibold text-white">{content.headline}</p>
         </div>
-        <PrimaryButton size="base" className="px-4 py-2 text-sm">
+        <PrimaryButton
+          size="base"
+          className="px-4 py-2 text-sm"
+          onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}
+        >
           {text}
         </PrimaryButton>
       </div>
