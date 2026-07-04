@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { X } from 'lucide-react';
 import SectionWrapper from '../components/SectionWrapper';
 
 const testimonialImages = [
@@ -15,6 +17,7 @@ const testimonialImages = [
 
 function Testimonials() {
   const [isPaused, setIsPaused] = useState(false);
+  const [lightbox, setLightbox] = useState(null); // src of the enlarged screenshot, or null
   const scrollRef = useRef(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -49,6 +52,19 @@ function Testimonials() {
     return () => cancelAnimationFrame(frameId);
   }, [isPaused]);
 
+  // Lock scroll + close on Escape while the enlarged screenshot is open
+  useEffect(() => {
+    if (!lightbox) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') setLightbox(null); };
+    document.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightbox]);
+
   const handlePointerDown = (event) => {
     // On touch devices let the browser handle native momentum scroll
     if (isTouchDevice.current) return;
@@ -77,7 +93,7 @@ function Testimonials() {
     <SectionWrapper
       id="testimonials"
       title="Отзывы учеников"
-      subtitle="Скриншоты с реальными результатами и впечатлениями выпускников."
+      subtitle="Скриншоты с реальными результатами. Нажмите на любой, чтобы открыть крупнее."
     >
       <div
         className="relative"
@@ -97,7 +113,8 @@ function Testimonials() {
             <motion.div
               key={`${src}-${index}`}
               whileHover={{ y: -6 }}
-              className="relative flex h-[360px] min-w-[220px] md:snap-center items-center justify-center rounded-2xl border border-white/12 bg-white/[0.04] p-5 shadow-[0_18px_38px_rgba(123,23,35,0.22)] sm:h-[380px] sm:min-w-[240px] lg:h-[400px] lg:min-w-[260px] xl:h-[420px] xl:min-w-[280px]"
+              onClick={() => setLightbox(src)}
+              className="relative flex h-[440px] min-w-[78vw] max-w-[320px] cursor-pointer items-center justify-center rounded-2xl border border-white/12 bg-white/[0.04] p-4 shadow-[0_18px_38px_rgba(123,23,35,0.22)] md:snap-center sm:h-[400px] sm:min-w-[280px] sm:max-w-none lg:h-[420px] lg:min-w-[300px] xl:h-[440px] xl:min-w-[320px]"
             >
               <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
               <div className="pointer-events-none absolute -bottom-10 right-8 h-20 w-20 rounded-full bg-genii-accent/20 blur-[40px]" />
@@ -113,6 +130,29 @@ function Testimonials() {
           ))}
         </div>
       </div>
+
+      {lightbox && createPortal(
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightbox(null)}
+            aria-label="Закрыть"
+            className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-sm transition-colors hover:bg-white/15"
+          >
+            <X className="h-5 w-5" />
+          </button>
+          <img
+            src={lightbox}
+            alt="Отзыв ученика"
+            className="max-h-[90vh] max-w-[92vw] rounded-2xl object-contain shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>,
+        document.body
+      )}
     </SectionWrapper>
   );
 }

@@ -31,7 +31,7 @@ function Curriculum() {
   };
 
   return (
-    <SectionWrapper id="curriculum" title="Программа курса:">
+    <SectionWrapper id="curriculum" title="Наполнение курса">
       <div className="grid gap-8">
         {curriculum.map((block, blockIndex) => {
           const isOpen = openSet.has(blockIndex);
@@ -42,13 +42,7 @@ function Curriculum() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               onMouseEnter={() => handleHoverEnter(blockIndex)}
-              className={`icon-card card-surface flex flex-col p-6 sm:p-8 cursor-default ${
-                blockIndex === 1
-                  ? 'border-genii-accent/30 bg-genii-accent/10'
-                  : blockIndex === 2
-                  ? 'border-white/10 bg-white/8'
-                  : 'border-white/10 bg-white/[0.03]'
-              }`}
+              className="icon-card card-surface flex cursor-default flex-col border-white/10 bg-white/[0.03] p-6 sm:p-8"
             >
               {/* Header */}
               <div className="flex w-full items-start gap-4">
@@ -57,17 +51,18 @@ function Curriculum() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-xl font-semibold leading-snug tracking-[-0.01em] text-white">{block.title}</h3>
-                  <p className="mt-0.5 text-sm italic text-white/40">Плотный и практичный блок</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {block.tools.map((tool) => (
-                      <span
-                        key={tool}
-                        className="rounded-full border border-genii-accent/20 bg-genii-accent/5 px-3 py-1 text-[0.6rem] uppercase tracking-[0.25em] text-genii-muted"
-                      >
-                        {tool}
-                      </span>
-                    ))}
-                  </div>
+                  {block.tools.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {block.tools.map((tool) => (
+                        <span
+                          key={tool}
+                          className="rounded-full border border-genii-accent/20 bg-genii-accent/5 px-3 py-1 text-[0.6rem] uppercase tracking-[0.25em] text-genii-muted"
+                        >
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 {/* Arrow — click only toggles close */}
                 <button
@@ -96,14 +91,16 @@ function Curriculum() {
                     style={{ overflow: 'hidden' }}
                   >
                     <div className="mt-6 flex flex-col gap-5 text-sm text-genii-light sm:text-base">
-                      {block.items.map((item) => (
+                      {block.items.map((item, itemIndex) => (
                         <div
-                          key={item.lesson}
+                          key={itemIndex}
                           className="border-b border-white/10 pb-4 last:border-b-0 last:pb-0"
                         >
-                          <span className="mb-2 inline-block rounded border border-[#c43555]/35 bg-[#c43555]/12 px-2 py-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[#c43555]">
-                            {item.lesson}
-                          </span>
+                          {item.lesson && (
+                            <span className="mb-2 inline-block rounded border border-[#c43555]/35 bg-[#c43555]/12 px-2 py-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[#c43555]">
+                              {item.lesson}
+                            </span>
+                          )}
                           <p className="mt-1 leading-relaxed whitespace-pre-line">{item.text}</p>
                         </div>
                       ))}
@@ -115,6 +112,12 @@ function Curriculum() {
           );
         })}
       </div>
+
+      <p className="text-sm leading-relaxed text-white/50">
+        * Для отработки уроков понадобится подписка на нейросети — от 5 000 до 10 000 рублей.
+        <br />
+        Доступ к урокам 6 месяцев с возможностью продления.
+      </p>
     </SectionWrapper>
   );
 }

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Megaphone, BarChart2, Sparkles, Camera } from 'lucide-react';
+import { Sparkles, Music, Star, Briefcase, Camera } from 'lucide-react';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -15,20 +15,24 @@ const fu = (delay = 0) => ({
 
 const rows = [
   {
-    icon: Megaphone,
-    text: 'блогер, эксперт или предприниматель. хотите создавать уникальный контент для своей страницы или своего дела',
-  },
-  {
-    icon: BarChart2,
-    text: 'маркетолог и смм специалист, желающий расширить сферу своих услуг и получить новые навыки',
-  },
-  {
     icon: Sparkles,
-    text: 'энтузиаст, который хочет научиться с нуля создавать творческие работы для себя и на заказ',
+    text: 'Новичкам, которые хотят научиться создавать творческие работы для себя, в подарок близким людям и на заказ',
+  },
+  {
+    icon: Music,
+    text: 'Музыкантам, которым нужны клипы на свои авторские песни',
+  },
+  {
+    icon: Star,
+    text: 'Мамам талантливых детей, которым необходимо продвижение в социальных сетях',
+  },
+  {
+    icon: Briefcase,
+    text: 'Экспертам и предпринимателям, которым нужен уникальный контент для своей страницы и своего дела',
   },
   {
     icon: Camera,
-    text: 'фотографам, видеографам, креаторам, которые хотят выйти на новый уровень и получить свежий глоток воздуха, вдохновения.',
+    text: 'Фотографам, видеографам, креаторам, которые хотят выйти на новый уровень и получить вдохновение',
   },
 ];
 
@@ -64,8 +68,8 @@ function Audience() {
         >
           {rows.map((row, i) => (
             <motion.div key={i} {...fu(0.1 + i * 0.1)}>
-              <div className="flex items-start gap-4 py-6">
-                <div className="relative flex-shrink-0 mt-0.5">
+              <div className="flex items-center gap-4 py-6">
+                <div className="relative flex-shrink-0">
                   <div className="absolute inset-0 rounded-full bg-white/10 blur-md" />
                   <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-white/15 transition-colors duration-300 hover:bg-white/12" style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(6px)' }}>
                     <row.icon className="h-5 w-5 text-genii-accent" />
@@ -83,7 +87,7 @@ function Audience() {
           <div className="mt-5 h-px bg-gradient-to-r from-genii-accent/40 via-genii-accent/15 to-transparent" />
 
           {/* Final highlighted statement */}
-          <motion.div {...fu(0.1 + rows.length * 0.1)} className="relative mt-5 pb-7 pl-4">
+          <motion.div {...fu(0.1 + rows.length * 0.1)} className="relative mt-5 pb-7 pl-[60px]">
             {/* left accent stroke */}
             <div
               className="absolute left-0 top-1 h-[90%] w-[2px] rounded-full"
@@ -98,11 +102,12 @@ function Audience() {
               }}
             />
             <p
-              className="relative text-xl sm:text-2xl"
+              className="relative text-lg sm:text-xl"
               style={{
                 fontStyle: 'italic',
                 fontWeight: 300,
-                color: '#ffffff',
+                letterSpacing: '0.015em',
+                color: 'rgba(255,255,255,0.92)',
                 textShadow: '0 2px 18px rgba(180,30,30,0.22), 0 0 5px rgba(255,80,80,0.1)',
               }}
             >

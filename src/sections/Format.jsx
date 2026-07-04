@@ -57,8 +57,9 @@ function Format() {
               <Clock className="h-5 w-5" />
             </span>
             <p className="text-base font-medium text-genii-light sm:text-lg leading-snug">
-              Длительность обучения <span className="font-semibold text-white">4 недели.</span>{' '}
-              Обратная связь <span className="font-semibold text-white">5 недель</span>
+              Длительность обучения <span className="font-semibold text-white">2 недели.</span>{' '}
+              Обратная связь <span className="font-semibold text-white">по полностью выполненной работе</span>{' '}
+              (клип 20-30 секунд на свою песню)
             </p>
           </div>
           <div className="h-px w-full bg-gradient-to-r from-white/10 to-transparent" />

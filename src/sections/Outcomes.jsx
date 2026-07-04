@@ -42,7 +42,7 @@ function Outcomes() {
   return (
     <SectionWrapper
       id="outcomes"
-      title="Через 4 недели у вас будет:"
+      title="Через 2 недели у вас будет:"
       className="bg-genii-bg-deep"
     >
       {/* Clean rows — no cards */}

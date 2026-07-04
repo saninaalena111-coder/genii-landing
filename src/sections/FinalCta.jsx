@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import PrimaryButton from '../components/PrimaryButton';
-import { courseInfo } from '../data/content';
 
 function FinalCta() {
   return (
@@ -14,13 +13,13 @@ function FinalCta() {
           viewport={{ once: true, amount: 0.3 }}
           className="text-3xl font-semibold leading-[1.25] tracking-[-0.02em] text-white sm:text-4xl lg:text-5xl"
         >
-          Создавайте видео нового поколения с помощью нейросетей. Раскрывайте в себе{' '}
+          Станьте главным героем своего вдохновляющего видео! Напишите песню про себя или родных. Раскройте в себе{' '}
           <em className="italic-accent">настоящего творца!</em>
         </motion.h2>
         <PrimaryButton size="large" fullWidth className="sm:w-auto" onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}>
           Стать ГенИИем
         </PrimaryButton>
-        <p className="text-xs uppercase tracking-[0.4em] text-genii-muted">Старт 25 марта</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-genii-muted">Старт 22.07</p>
       </div>
     </section>
   );

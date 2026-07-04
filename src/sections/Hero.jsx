@@ -57,7 +57,18 @@ function Hero() {
           variants={fadeUp}
           className="mt-4 max-w-[520px] text-xl font-medium leading-snug text-white/75 sm:text-2xl lg:text-3xl"
         >
-          Курс по созданию художественного и<br className="hidden sm:block" /> креативного контента в нейросетях.
+          КУРС ПЕСНЯ КЛИП
+        </motion.p>
+
+        {/* Description */}
+        <motion.p
+          custom={3}
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="mt-4 max-w-[560px] text-base font-medium leading-relaxed text-white/60 sm:text-lg"
+        >
+          Вдохновляющие музыкальные видео с вами в главной роли с помощью нейросетей. Песни | клипы | продвижение.
         </motion.p>
 
         {/* CTA — slightly right of center with startDate label above */}
@@ -66,7 +77,7 @@ function Hero() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-9 flex w-full max-w-[620px] flex-col items-end gap-2"
+          className="mt-16 flex w-full max-w-[620px] flex-col items-end gap-2 sm:mt-24"
         >
           <span className="text-xs font-medium uppercase tracking-[0.45em] text-white/38">{courseInfo.startDate}</span>
           <PrimaryButton size="large" onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}>

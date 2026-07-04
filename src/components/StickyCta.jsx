@@ -2,15 +2,15 @@ import PrimaryButton from './PrimaryButton';
 
 const CTA_VARIANTS = {
   neutral: {
-    label: 'СТАРТ 25 МАРТА',
+    label: 'СТАРТ 22.07',
     headline: 'Место в потоке',
   },
   conversion: {
-    label: 'СТАРТ 25 МАРТА',
+    label: 'СТАРТ 22.07',
     headline: 'Осталось 12 мест',
   },
   social: {
-    label: 'СТАРТ 25 МАРТА',
+    label: 'СТАРТ 22.07',
     headline: 'Уже записалось 37 человек',
   },
 };

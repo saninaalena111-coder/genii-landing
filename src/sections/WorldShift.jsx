@@ -20,10 +20,9 @@ const listFade = {
 };
 
 const bulletSkills = [
-  'Управлять атмосферой кадра, как режиссёр и художник',
-  'Создавать своих уникальных персонажей, героев, музыкантов',
-  'Создавать свою авторскую музыку',
-  'Монтировать захватывающие видео',
+  'Создавать авторские песни на любые темы и в любом жанре (даже если вы никогда не писали стихов и не знаете ноты)',
+  'Генерировать музыкальные и игровые видео кинематографического качества. БЕЗ монтажа и с монтажом.',
+  'Узнаете секреты продвижения видео, чтобы их смотрели тысячи людей.',
 ];
 
 function WorldShift() {
@@ -80,7 +79,7 @@ function WorldShift() {
               '0 0 40px rgba(123,23,35,0.35), 0 0 80px rgba(123,23,35,0.12)',
           }}
         >
-          За 4 недели, на курсе ГенИИ вы научитесь
+          За 2 недели, на курсе ГенИИ вы научитесь
         </motion.h2>
 
         {/* ── Main glass card ── */}
@@ -119,81 +118,62 @@ function WorldShift() {
             }}
           />
 
-          <div className="relative flex flex-col items-center gap-6">
-            <p className="text-2xl font-medium leading-relaxed text-white sm:text-3xl">
-              Создавать изображения и видео
-              <br />
-              с реальными людьми и продуктами
-              <br />
-              в любом стиле
-            </p>
-
-            {/* Style tags */}
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {['Реализм', 'Фантазия', 'Мультипликация'].map((tag) => (
+          <ul className="relative flex w-full flex-col text-left" style={{ maxWidth: '620px', margin: '0 auto', width: '100%' }}>
+            {bulletSkills.map((skill, i) => (
+              <motion.li
+                key={skill}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.15 }}
+                variants={listFade}
+                className="flex items-start gap-4"
+                style={{ marginBottom: i === bulletSkills.length - 1 ? 0 : '18px' }}
+              >
+                {/* Red accent dot */}
                 <span
-                  key={tag}
                   style={{
-                    borderRadius: '999px',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    background: 'rgba(255,255,255,0.05)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    padding: '6px 18px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    color: 'rgba(255,255,255,0.72)',
-                    letterSpacing: '0.04em',
+                    marginTop: '9px',
+                    flexShrink: 0,
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: '#ff3b3b',
+                    boxShadow: '0 0 8px rgba(255,59,59,0.75), 0 0 16px rgba(200,30,30,0.4)',
+                    display: 'block',
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: '18px',
+                    lineHeight: 1.6,
+                    color: 'rgba(255,255,255,0.90)',
                   }}
                 >
-                  {tag}
+                  {skill}
                 </span>
-              ))}
-            </div>
-          </div>
+              </motion.li>
+            ))}
+          </ul>
         </motion.div>
 
-        {/* ── Feature list ── */}
-        <ul
-          className="flex w-full flex-col text-left"
-          style={{ maxWidth: '680px', margin: '0 auto', width: '100%' }}
+        {/* Learning outcome */}
+        <motion.div
+          custom={2}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+          className="relative w-full max-w-[680px] rounded-2xl border border-genii-accent/30 bg-genii-accent/10 px-6 py-5 text-center sm:px-8 sm:py-6"
         >
-          {bulletSkills.map((skill, i) => (
-            <motion.li
-              key={skill}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.15 }}
-              variants={listFade}
-              className="flex items-start gap-4"
-              style={{ marginBottom: '18px' }}
-            >
-              {/* Red accent dot */}
-              <span
-                style={{
-                  marginTop: '7px',
-                  flexShrink: 0,
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  background: '#ff3b3b',
-                  boxShadow: '0 0 8px rgba(255,59,59,0.75), 0 0 16px rgba(200,30,30,0.4)',
-                  display: 'block',
-                }}
-              />
-              <span
-                style={{
-                  fontSize: '18px',
-                  lineHeight: 1.6,
-                  color: 'rgba(255,255,255,0.90)',
-                }}
-              >
-                {skill}
-              </span>
-            </motion.li>
-          ))}
-        </ul>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-genii-accent">Итог обучения</p>
+          <p className="mt-2 text-lg font-medium leading-relaxed text-white sm:text-xl">
+            Вы создадите свою авторскую песню и музыкальный клип, либо игровое видео
+          </p>
+          <p className="mt-1.5 text-sm font-light leading-relaxed text-white/55 sm:text-base">
+            (реклама, самопрезентация, мультфильм и так далее)
+          </p>
+        </motion.div>
       </div>
     </SectionWrapper>
   );

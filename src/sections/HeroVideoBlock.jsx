@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { Volume2, VolumeX } from 'lucide-react';
 import Hero from './Hero';
 import WorldShift from './WorldShift';
 
@@ -17,6 +18,68 @@ function HeroVideoBlock() {
   const videoSrc = isMobile
     ? '/media/videos/Hero-mobile.mp4'
     : '/media/videos/Hero-web.mp4';
+
+  // ── Hero audio ──────────────────────────────────────────────────────────
+  // The video autoplays muted (required for autoplay). The user can turn sound
+  // on/off with the button below; once on, volume fades with hero visibility on
+  // scroll (never a hard cut) and fades back if they return — but sound is never
+  // enabled without an explicit user action.
+  const videoRef = useRef(null);
+  const soundOnRef = useRef(false); // did the user turn sound on?
+  const rafRef = useRef(0);
+  const [soundOn, setSoundOn] = useState(false);
+
+  const clamp01 = (n) => Math.min(1, Math.max(0, n));
+
+  // Eases video.volume toward a scroll-derived target every frame, so the sound
+  // never cuts abruptly. Target = hero visibility (1 at top → 0 after one screen
+  // scrolled), or 0 once the user has muted.
+  const runVolumeStep = () => {
+    const v = videoRef.current;
+    if (!v) { rafRef.current = 0; return; }
+    const vh = window.innerHeight || 1;
+    const visibility = clamp01(1 - window.scrollY / vh);
+    const target = soundOnRef.current ? visibility : 0;
+    let next = v.volume + (target - v.volume) * 0.12;
+    if (Math.abs(target - next) < 0.005) next = target;
+    v.volume = clamp01(next);
+    // After a manual mute has fully faded out, hard-mute and stop the loop.
+    if (!soundOnRef.current && v.volume <= 0.001) {
+      v.muted = true;
+      rafRef.current = 0;
+      return;
+    }
+    rafRef.current = requestAnimationFrame(runVolumeStep);
+  };
+
+  const ensureVolumeLoop = () => {
+    if (!rafRef.current) rafRef.current = requestAnimationFrame(runVolumeStep);
+  };
+
+  const enableSound = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    soundOnRef.current = true;
+    setSoundOn(true);
+    v.volume = 0; // start from silence, fade up
+    v.muted = false;
+    ensureVolumeLoop();
+  };
+
+  const disableSound = () => {
+    soundOnRef.current = false;
+    setSoundOn(false);
+    ensureVolumeLoop(); // fades to 0, then the loop hard-mutes and stops
+  };
+
+  const toggleSound = () => (soundOn ? disableSound() : enableSound());
+
+  // Force autoplay-safe muted state on mount (React does not reliably reflect
+  // the `muted` attribute to the DOM property) and clean up the rAF on unmount.
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.muted = true;
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
@@ -51,6 +114,7 @@ function HeroVideoBlock() {
           style={{ y: videoY, height: '115%', top: 0 }}
         >
           <video
+            ref={videoRef}
             autoPlay
             muted
             loop
@@ -136,6 +200,17 @@ function HeroVideoBlock() {
           }}
         />
       </div>
+
+      {/* ── Sound toggle for the hero video ── */}
+      <button
+        type="button"
+        onClick={toggleSound}
+        aria-label={soundOn ? 'Выключить звук' : 'Включить звук'}
+        aria-pressed={soundOn}
+        className="pointer-events-auto absolute right-4 top-[76px] z-[2] flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/75 backdrop-blur-md transition-all duration-200 hover:bg-black/60 hover:text-white sm:right-6 sm:top-[84px]"
+      >
+        {soundOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+      </button>
 
       {/* ── Hero (transparent — video is the bg) ── */}
       <div className="relative" style={{ zIndex: 1 }}>

@@ -26,6 +26,8 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Allow non-breaking spaces (U+00A0) in JSX text for Russian typography
+      'no-irregular-whitespace': ['error', { skipJSXText: true }],
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
     },
@@ -33,6 +35,13 @@ export default defineConfig([
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    // Vercel serverless functions run on Node, not the browser
+    files: ['api/**/*.js'],
+    languageOptions: {
+      globals: globals.node,
     },
   },
 ])

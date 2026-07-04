@@ -237,10 +237,6 @@ export default function StudentCarousel() {
 
               const borderColor = isCenter ? 'rgba(155,40,55,0.80)' : 'rgba(255,255,255,0.07)';
 
-              // Only autoPlay center ± 1 cards; preload metadata for ± 2; none beyond that
-              const shouldPlay    = dist <= 1;
-              const shouldPreload = dist <= 2;
-
               return (
                 <div
                   key={`student-${index}`}
