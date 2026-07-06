@@ -36,7 +36,7 @@ function Landing() {
     : '/media/videos/Hero2-web.mp4';
 
   return (
-    <div className="min-h-screen bg-genii-bg text-white">
+    <div className="min-h-screen overflow-x-clip bg-genii-bg text-white">
       <CursorGlow />
       <ScrollProgress />
       <StickyNav />

@@ -75,10 +75,23 @@ function HeroVideoBlock() {
   const toggleSound = () => (soundOn ? disableSound() : enableSound());
 
   // Force autoplay-safe muted state on mount (React does not reliably reflect
-  // the `muted` attribute to the DOM property) and clean up the rAF on unmount.
+  // the `muted` attribute to the DOM property). iOS Safari also often won't
+  // autoplay from the attribute alone and can leave the first frame unpainted
+  // until a scroll repaints it — so kick playback explicitly and retry once the
+  // data is ready. Clean up the rAF on unmount.
   useEffect(() => {
-    if (videoRef.current) videoRef.current.muted = true;
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    const v = videoRef.current;
+    if (!v) return undefined;
+    v.muted = true;
+    const play = () => { const p = v.play(); if (p) p.catch(() => {}); };
+    play();
+    v.addEventListener('loadeddata', play);
+    v.addEventListener('canplay', play);
+    return () => {
+      v.removeEventListener('loadeddata', play);
+      v.removeEventListener('canplay', play);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   const { scrollYProgress } = useScroll({
@@ -119,7 +132,10 @@ function HeroVideoBlock() {
             muted
             loop
             playsInline
+            preload="auto"
+            poster="/media/videos/hero-poster.jpg"
             className="h-full w-full object-cover object-center"
+            style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
           >
             <source src={videoSrc} type="video/mp4" />
           </video>
