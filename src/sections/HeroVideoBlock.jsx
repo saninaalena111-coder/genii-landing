@@ -121,10 +121,11 @@ function HeroVideoBlock() {
         className="pointer-events-none absolute inset-0 overflow-hidden"
         style={{ zIndex: 0 }}
       >
-        {/* Parallax video */}
+        {/* Parallax video (desktop only — the transform breaks iOS video repaint,
+            so on mobile the video is a plain static background) */}
         <motion.div
           className="absolute inset-0"
-          style={{ y: videoY, height: '115%', top: 0 }}
+          style={isMobile ? { height: '100%', top: 0 } : { y: videoY, height: '115%', top: 0 }}
         >
           <video
             ref={videoRef}
