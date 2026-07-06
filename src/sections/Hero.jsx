@@ -49,26 +49,26 @@ function Hero() {
           {courseInfo.title}
         </motion.h1>
 
-        {/* Subtitle — forced line break for readability */}
+        {/* Description */}
         <motion.p
           custom={2}
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-4 max-w-[520px] text-xl font-medium leading-snug text-white/75 sm:text-2xl lg:text-3xl"
+          className="mt-5 max-w-[600px] text-lg font-medium leading-relaxed text-white/75 sm:text-xl lg:text-2xl"
         >
-          КУРС ПЕСНЯ КЛИП
+          Вдохновляющие музыкальные видео с вами в главной роли с помощью нейросетей.
         </motion.p>
 
-        {/* Description */}
+        {/* Tagline */}
         <motion.p
           custom={3}
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-4 max-w-[560px] text-base font-medium leading-relaxed text-white/60 sm:text-lg"
+          className="mt-3 text-base font-semibold text-white/65 sm:text-lg"
         >
-          Вдохновляющие музыкальные видео с вами в главной роли с помощью нейросетей. Песни | клипы | продвижение.
+          Песни | клипы | продвижение.
         </motion.p>
 
         {/* CTA — slightly right of center with startDate label above */}
