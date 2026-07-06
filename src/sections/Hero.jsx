@@ -66,7 +66,7 @@ function Hero() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-3 text-base font-semibold text-white/65 sm:text-lg"
+          className="mt-3 text-base font-semibold uppercase tracking-wide text-white/65 sm:text-lg"
         >
           Песни | клипы | продвижение.
         </motion.p>

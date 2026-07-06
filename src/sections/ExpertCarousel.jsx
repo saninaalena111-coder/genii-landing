@@ -5,7 +5,7 @@ import SectionWrapper from '../components/SectionWrapper';
 
 // ── Dynamic media scanning via Vite glob ────────────────────
 const _expertImgs = import.meta.glob(
-  '/public/media/experts/imeges/*.{jpeg,jpg,JPEG,JPG,png,PNG,webp,WEBP}',
+  '/public/media/experts/screens/*.{jpeg,jpg,JPEG,JPG,png,PNG,webp,WEBP}',
   { eager: true, query: '?url', import: 'default' }
 );
 const _expertVids = import.meta.glob(
