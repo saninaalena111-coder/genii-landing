@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import HeroVideoBlock from './sections/HeroVideoBlock';
 import Authors from './sections/Authors';
 import ExpertCarousel from './sections/ExpertCarousel';
-import StudentCarousel from './sections/StudentCarousel';
 import Curriculum from './sections/Curriculum';
 import MidCta from './sections/MidCta';
 import Format from './sections/Format';
@@ -46,8 +45,6 @@ function Landing() {
         <Authors />
         <SectionDivider />
         <ExpertCarousel />
-        <SectionDivider />
-        <StudentCarousel />
         <SectionDivider />
         <Curriculum />
         <MidCta />
