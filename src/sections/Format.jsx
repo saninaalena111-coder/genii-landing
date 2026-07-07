@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, Video, BookOpen, MessageCircle, Users } from 'lucide-react';
+import { Clock, Video, MessageCircle, Users } from 'lucide-react';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -20,14 +20,9 @@ const mainCards = [
     text: 'Все уроки создаются в реальном времени, вы получаете самую свежую информацию про самые передовые модели. Нет устаревших уроков в записи.',
   },
   {
-    icon: BookOpen,
-    title: 'Практические задания.',
-    text: 'По каждому уроку вы создадите свое видео, которое вы добавите себе в портфолио.',
-  },
-  {
     icon: MessageCircle,
-    title: 'Регулярная обратная связь',
-    text: 'от кураторов и авторов курса.',
+    title: 'Объемная регулярная обратная связь',
+    text: 'от кураторов и авторов курса по всем практическим заданиям.',
   },
 ];
 
@@ -66,7 +61,7 @@ function Format() {
         </motion.div>
 
         {/* 3 cards */}
-        <div className="grid gap-5 sm:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2">
           {mainCards.map((card, i) => (
             <motion.div
               key={card.title}
