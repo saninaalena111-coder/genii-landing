@@ -5,15 +5,15 @@ import { X } from 'lucide-react';
 import SectionWrapper from '../components/SectionWrapper';
 
 const testimonialImages = [
-  'IMG_0647.JPG',
-  'IMG_0648.PNG',
-  'IMG_0649.PNG',
-  'IMG_0650.PNG',
-  'IMG_0651.PNG',
-  'IMG_0652.PNG',
+  'IMG_0647.jpg',
+  'IMG_0648.jpg',
+  'IMG_0649.jpg',
+  'IMG_0650.jpg',
+  'IMG_0651.jpg',
+  'IMG_0652.jpg',
   'photo_2026-01-21_18-55-20.jpg',
   'photo_2026-01-23_09-33-54.jpg',
-].map((name) => `/media/testimonials/${encodeURI(name)}`);
+].map((name) => `/media/testimonials/optimized/${name}`);
 
 function Testimonials() {
   const [isPaused, setIsPaused] = useState(false);
@@ -22,6 +22,8 @@ function Testimonials() {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+  const downPos = useRef({ x: 0, y: 0 });
+  const movedRef = useRef(false); // distinguishes a tap from a swipe/drag
   // Detect touch/mobile device once — skip RAF+drag on touch, let native scroll handle it
   const isTouchDevice = useRef(
     typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
@@ -66,6 +68,8 @@ function Testimonials() {
   }, [lightbox]);
 
   const handlePointerDown = (event) => {
+    downPos.current = { x: event.clientX, y: event.clientY };
+    movedRef.current = false;
     // On touch devices let the browser handle native momentum scroll
     if (isTouchDevice.current) return;
     const container = scrollRef.current;
@@ -77,6 +81,12 @@ function Testimonials() {
   };
 
   const handlePointerMove = (event) => {
+    if (
+      Math.abs(event.clientX - downPos.current.x) > 8 ||
+      Math.abs(event.clientY - downPos.current.y) > 8
+    ) {
+      movedRef.current = true;
+    }
     if (isTouchDevice.current || !isDragging.current) return;
     const container = scrollRef.current;
     if (!container) return;
@@ -87,6 +97,12 @@ function Testimonials() {
 
   const handlePointerUp = () => {
     isDragging.current = false;
+  };
+
+  // Open the enlarged view only on a real tap, not at the end of a swipe/drag
+  const openLightbox = (src) => {
+    if (movedRef.current) return;
+    setLightbox(src);
   };
 
   return (
@@ -113,7 +129,7 @@ function Testimonials() {
             <motion.div
               key={`${src}-${index}`}
               whileHover={{ y: -6 }}
-              onClick={() => setLightbox(src)}
+              onClick={() => openLightbox(src)}
               className="relative flex h-[440px] min-w-[78vw] max-w-[320px] cursor-pointer items-center justify-center rounded-2xl border border-white/12 bg-white/[0.04] p-4 shadow-[0_18px_38px_rgba(123,23,35,0.22)] md:snap-center sm:h-[400px] sm:min-w-[280px] sm:max-w-none lg:h-[420px] lg:min-w-[300px] xl:h-[440px] xl:min-w-[320px]"
             >
               <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
