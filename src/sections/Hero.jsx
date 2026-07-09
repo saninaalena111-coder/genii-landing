@@ -77,7 +77,7 @@ function Hero() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-16 flex w-full max-w-[620px] flex-col items-end gap-2 sm:mt-24"
+          className="mt-16 flex w-full max-w-[620px] flex-col items-center gap-2 sm:mt-24"
         >
           <span className="text-xs font-medium uppercase tracking-[0.45em] text-white/38">{courseInfo.startDate}</span>
           <PrimaryButton size="large" onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}>
@@ -85,20 +85,29 @@ function Hero() {
           </PrimaryButton>
         </motion.div>
 
-        {/* Trust points — simple text labels */}
+        {/* Trust points — centered stack; parenthetical drops to its own line */}
         <motion.div
           custom={5}
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2"
+          className="mt-10 flex flex-col items-center gap-2.5 text-center"
         >
-          {trustPoints.map((point, i) => (
-            <span key={point} className="text-xs uppercase tracking-widest text-white/32">
-              {i > 0 && <span className="mr-8 text-white/15">·</span>}
-              {point}
-            </span>
-          ))}
+          {trustPoints.map((point) => {
+            const idx = point.indexOf('(');
+            const main = idx === -1 ? point : point.slice(0, idx).trim();
+            const paren = idx === -1 ? '' : point.slice(idx);
+            return (
+              <span key={point} className="text-xs uppercase tracking-widest text-white/32">
+                {main}
+                {paren && (
+                  <span className="mt-0.5 block text-[11px] normal-case tracking-normal text-white/25">
+                    {paren}
+                  </span>
+                )}
+              </span>
+            );
+          })}
         </motion.div>
 
       </div>

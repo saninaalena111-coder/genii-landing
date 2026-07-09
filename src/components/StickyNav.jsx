@@ -68,8 +68,9 @@ export default function StickyNav() {
           <button
             onClick={() => handleLink('#top')}
             className="text-xl font-bold tracking-tight text-white transition-opacity duration-200 hover:opacity-80"
+            style={{ textShadow: '0 1px 10px rgba(0,0,0,0.65)' }}
           >
-            Ген<span className="text-genii-accent">ИИ</span>
+            Ген<span style={{ color: '#ff5568', textShadow: '0 0 12px rgba(255,85,104,0.6), 0 1px 8px rgba(0,0,0,0.6)' }}>ИИ</span>
           </button>
 
           {/* Desktop nav */}

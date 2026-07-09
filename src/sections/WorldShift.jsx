@@ -20,8 +20,8 @@ const listFade = {
 };
 
 const bulletSkills = [
-  'Создавать авторские песни на любые темы и в любом жанре (даже если вы никогда не писали стихов и не знаете ноты)',
-  'Генерировать музыкальные и игровые видео кинематографического качества. БЕЗ монтажа и с монтажом.',
+  'Создавать авторские песни на любые темы и в любом жанре, даже если вы никогда не писали стихов и не знаете ноты',
+  'Генерировать музыкальные и игровые видео кинематографического качества, БЕЗ монтажа и с монтажом.',
   'Узнаете секреты продвижения видео, чтобы их смотрели тысячи людей.',
 ];
 
@@ -79,7 +79,7 @@ function WorldShift() {
               '0 0 40px rgba(123,23,35,0.35), 0 0 80px rgba(123,23,35,0.12)',
           }}
         >
-          За 2 недели, на курсе ГенИИ вы научитесь
+          На курсе ГенИИ вы научитесь
         </motion.h2>
 
         {/* ── Main glass card ── */}
@@ -166,7 +166,7 @@ function WorldShift() {
           variants={fadeUp}
           className="relative w-full max-w-[680px] rounded-2xl border border-genii-accent/30 bg-genii-accent/10 px-6 py-5 text-center sm:px-8 sm:py-6"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-genii-accent">Итог обучения</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: '#ff6b81', textShadow: '0 1px 8px rgba(0,0,0,0.7)' }}>Итог обучения</p>
           <p className="mt-2 text-lg font-medium leading-relaxed text-white sm:text-xl">
             Вы создадите свою авторскую песню и музыкальный клип, либо игровое видео
           </p>
