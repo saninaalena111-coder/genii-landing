@@ -325,7 +325,7 @@ function ExpertCarousel() {
                             className="h-full w-full object-cover"
                             loading="lazy"
                             draggable={false}
-                            style={{ pointerEvents: 'none' }}
+                            style={{ pointerEvents: 'none', transform: 'scale(1.05)' }}
                           />
                         ) : (
                           <div className="h-full w-full" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '16px' }} />
@@ -348,7 +348,7 @@ function ExpertCarousel() {
                         </div>
                         {/* Centre: watch CTA | Others: play icon */}
                         {isCenter ? (
-                          <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+                          <div className="absolute inset-0 flex items-center justify-center">
                             <span className="flex items-center gap-1.5 rounded-full border border-white/22 bg-white/10 px-4 py-1.5 text-[11px] font-medium text-white backdrop-blur-sm">
                               <Play className="h-3 w-3 fill-white" />
                               смотреть
@@ -370,6 +370,7 @@ function ExpertCarousel() {
                           className="h-full w-full object-cover"
                           loading="lazy"
                           draggable={false}
+                          style={{ transform: 'scale(1.05)' }}
                         />
                         {/* Bottom gradient glow */}
                         <div
