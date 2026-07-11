@@ -9,7 +9,7 @@ const legalLinks = [
 
 function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-genii-bg-deeper py-10">
+    <footer className="border-t border-white/10 bg-genii-bg-deeper pt-10 pb-32 md:pb-10">
       <div className="mx-auto flex w-full max-w-[1120px] flex-col gap-4 px-5 sm:px-8 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-lg font-semibold text-white">{courseInfo.title}</p>
