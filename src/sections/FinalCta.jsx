@@ -19,7 +19,7 @@ function FinalCta() {
         <PrimaryButton size="large" fullWidth className="sm:w-auto" onClick={() => { window.location.href = '/api/go-pay' + (window.location.search || ''); }}>
           Стать ГенИИем
         </PrimaryButton>
-        <p className="text-xs uppercase tracking-[0.4em] text-genii-muted">Старт 01.08</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-genii-muted">Старт 17.08</p>
       </div>
     </section>
   );
