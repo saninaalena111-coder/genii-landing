@@ -45,8 +45,7 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error('[xl/order-created] Unexpected error:', err.message ?? err);
-    const debug = req.query?.debug === 'gd2026';
-    return res.status(500).json({ error: debug ? String(err.message ?? err) : 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }
 
