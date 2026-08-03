@@ -39,11 +39,15 @@ export default async function handler(req, res) {
 
     const productName = product || DEFAULT_PRODUCT;
 
-    if (tg_id) {
-      const redirectUrl =
-        `${XL_BASE_URL}?tg_id=${encodeURIComponent(tg_id)}` +
-        `&cuid=${encodeURIComponent(cuid || '')}` +
-        `&product=${encodeURIComponent(productName)}`;
+    // Forward identity to Prodamus whenever we have a cuid (or tg_id), so the
+    // payment webhooks can tag the subscriber. cuid alone is enough — tg_id is
+    // optional. Only fully-organic traffic (no params) hits the plain checkout.
+    if (cuid || tg_id) {
+      const params = new URLSearchParams();
+      if (tg_id) params.set('tg_id', tg_id);
+      if (cuid) params.set('cuid', cuid);
+      params.set('product', productName);
+      const redirectUrl = `${XL_BASE_URL}?${params.toString()}`;
 
       console.log('[go-pay] BotHelp traffic — redirecting with params');
       console.log('[go-pay] Redirecting to:', redirectUrl);
